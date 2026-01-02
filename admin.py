@@ -1,6 +1,6 @@
 from config import ADMIN_PASSWORD
-from movies import add_movie, view_movies, remove_movie, update_seats
-from bookings import view_bookings, total_revenue
+from movie import add_movie, view_movies, remove_movie, update_seats
+from booking import view_bookings, total_revenue
 
 def admin_mode():
     pwd = input("Enter admin password: ")
