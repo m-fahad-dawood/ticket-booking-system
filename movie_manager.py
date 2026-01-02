@@ -4,26 +4,27 @@ def view_movies():
     try:
         with open(MOVIE_FILE, "r") as f:
             movies = f.readlines()
-
         if not movies:
             print("No movies available.")
-            return
+            return []
 
         print("\n--- AVAILABLE MOVIES ---")
         for i, movie in enumerate(movies, start=1):
             name, category, time, price, seats = movie.strip().split(",")
             print(f"{i}. {name} | {category} | {time} | Rs {price} | Seats: {seats}")
+        return movies
 
     except FileNotFoundError:
-        print("No movies file found.")
+        print("Movies file not found.")
+        return []
 
 
 def add_movie():
-    name = input("Enter movie name: ")
-    category = input("Enter category: ")
-    time = input("Enter show time: ")
-    price = input("Enter ticket price: ")
-    seats = input("Enter available seats: ")
+    name = input("Movie name: ")
+    category = input("Category: ")
+    time = input("Show time: ")
+    price = input("Ticket price: ")
+    seats = input("Available seats: ")
 
     with open(MOVIE_FILE, "a") as f:
         f.write(f"{name},{category},{time},{price},{seats}\n")
@@ -32,11 +33,11 @@ def add_movie():
 
 
 def remove_movie():
-    try:
-        with open(MOVIE_FILE, "r") as f:
-            movies = f.readlines()
+    movies = view_movies()
+    if not movies:
+        return
 
-        view_movies()
+    try:
         choice = int(input("Enter movie number to remove: "))
         movies.pop(choice - 1)
 
@@ -45,31 +46,32 @@ def remove_movie():
 
         print("✅ Movie removed successfully!")
     except:
-        print("Invalid input!")
+        print("❌ Invalid choice!")
 
 
 def update_seats():
-    try:
-        with open(MOVIE_FILE, "r") as f:
-            movies = f.readlines()
+    movies = view_movies()
+    if not movies:
+        return
 
-        view_movies()
+    try:
         choice = int(input("Select movie number: "))
-        change = int(input("Enter seats to add/remove: "))
+        change = int(input("Seats to add/remove: "))
 
         data = movies[choice - 1].strip().split(",")
-        seats = int(data[4]) + change
+        name, category, time, price, seats = data
+        seats = int(seats) + change
 
         if seats < 0:
             print("❌ Seats cannot be negative!")
             return
 
-        data[4] = str(seats)
-        movies[choice - 1] = ",".join(data) + "\n"
+        movies[choice - 1] = f"{name},{category},{time},{price},{seats}\n"
 
         with open(MOVIE_FILE, "w") as f:
             f.writelines(movies)
 
         print("✅ Seats updated!")
+
     except:
-        print("Invalid input!")
+        print("❌ Invalid input!")
