@@ -1,5 +1,5 @@
 from config import MOVIE_FILE, BOOKING_FILE
-from movies import view_movies
+from movie import view_movies
 
 def book_ticket():
     try:
